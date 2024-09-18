@@ -76,11 +76,11 @@ def login_user(request):
             response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
       
-      if user is not None:
-        login(request, user)
-        response = HttpResponseRedirect(reverse("main:show_main"))
-        response.set_cookie('last_login', str(datetime.datetime.now()))
-        return response
+            if user is not None:
+                login(request, user)
+                response = HttpResponseRedirect(reverse("main:show_main"))
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
    else:
       form = AuthenticationForm(request)
    context = {'form': form}
