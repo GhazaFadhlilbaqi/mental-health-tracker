@@ -1,29 +1,28 @@
 import datetime
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse 
 from main.forms import MoodEntryForm
 from main.models import MoodEntry
-from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-# Create your views here.
 @login_required(login_url='/login')
 def show_main(request):
-    mood_entries = MoodEntry.objects.all()
-
+    mood_entries = MoodEntry.objects.filter(user=request.user)
     context = {
-        'npm' : '2306173321',
+        'npm': '2306173321',
         'name': request.user.username,
         'class': 'PBP KKI',
         'mood_entries': mood_entries,
-        'last_login': request.COOKIES['last_login','Not Set'],
+        'last_login': request.COOKIES.get('last_login', 'Not set'),  # Default value if cookie doesn't exist
     }
 
     return render(request, "main.html", context)
+
 
 def create_mood_entry(request):
     form = MoodEntryForm(request.POST or None)
